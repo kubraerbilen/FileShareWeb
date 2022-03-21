@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FileShareWeb.DB.FOLDER_TABLE>
+
+@{
+    ViewBag.Title = "Klasörlerim";
+}
+
+<h2>Klasörlerim</h2>
+
+<p>
+    @Html.ActionLink("Klasör Oluştur", "FolderCreate")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.KlasorAdi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.KlasorAciklamasi)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.KlasorAdi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KlasorAciklamasi)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit",new { id=item.ID })" class="btn btn-info btn-xs">Düzenle</a>
+
+                <a href="@Url.Action("DosyaYukle"@*,new { id=item.ID }*@)" class="btn btn-warning btn-xs">Dosya Yükle</a>
+
+                <button type="button" onclick="DeleteProduct('@Url.Action("Delete", new { id=item.ID })')" class="btn btn-danger btn-xs">Sil</button>
+            </td>
+        </tr>
+    }
+
+</table>
+<script>
+    function DeleteProduct(url) {
+        if (confirm("Silmek İstediğine Emin Misin?")) {
+            location.href = url;
+        }
+    }
+</script>

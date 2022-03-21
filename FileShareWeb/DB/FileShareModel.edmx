@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FileShareModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="FILE_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DosyaAdi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DosyaUzantisi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DosyaBoyutu" Type="bigint" Nullable="false" />
+          <Property Name="FolderId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DosyayuklemeZamani" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FOLDER_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="KlasorAdi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="KlasorAciklamasi" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USER_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_FILE_TABLE_FOLDER_TABLE">
+          <End Role="FOLDER_TABLE" Type="Self.FOLDER_TABLE" Multiplicity="1" />
+          <End Role="FILE_TABLE" Type="Self.FILE_TABLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FOLDER_TABLE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FILE_TABLE">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOLDER_TABLE_USER_TABLE">
+          <End Role="USER_TABLE" Type="Self.USER_TABLE" Multiplicity="1" />
+          <End Role="FOLDER_TABLE" Type="Self.FOLDER_TABLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USER_TABLE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FOLDER_TABLE">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FileShareModelStoreContainer">
+          <EntitySet Name="FILE_TABLE" EntityType="Self.FILE_TABLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FOLDER_TABLE" EntityType="Self.FOLDER_TABLE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USER_TABLE" EntityType="Self.USER_TABLE" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FILE_TABLE_FOLDER_TABLE" Association="Self.FK_FILE_TABLE_FOLDER_TABLE">
+            <End Role="FOLDER_TABLE" EntitySet="FOLDER_TABLE" />
+            <End Role="FILE_TABLE" EntitySet="FILE_TABLE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOLDER_TABLE_USER_TABLE" Association="Self.FK_FOLDER_TABLE_USER_TABLE">
+            <End Role="USER_TABLE" EntitySet="USER_TABLE" />
+            <End Role="FOLDER_TABLE" EntitySet="FOLDER_TABLE" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FileShareModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="FileShareEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="FILE_TABLE" EntityType="FileShareModel.FILE_TABLE" />
+          <EntitySet Name="FOLDER_TABLE" EntityType="FileShareModel.FOLDER_TABLE" />
+          <EntitySet Name="USER_TABLE" EntityType="FileShareModel.USER_TABLE" />
+          <AssociationSet Name="FK_FILE_TABLE_FOLDER_TABLE" Association="FileShareModel.FK_FILE_TABLE_FOLDER_TABLE">
+            <End Role="FOLDER_TABLE" EntitySet="FOLDER_TABLE" />
+            <End Role="FILE_TABLE" EntitySet="FILE_TABLE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FOLDER_TABLE_USER_TABLE" Association="FileShareModel.FK_FOLDER_TABLE_USER_TABLE">
+            <End Role="USER_TABLE" EntitySet="USER_TABLE" />
+            <End Role="FOLDER_TABLE" EntitySet="FOLDER_TABLE" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="FILE_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="DosyaAdi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DosyaUzantisi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DosyaBoyutu" Type="Int64" Nullable="false" />
+          <Property Name="FolderId" Type="Guid" Nullable="false" />
+          <Property Name="DosyayuklemeZamani" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="FOLDER_TABLE" Relationship="FileShareModel.FK_FILE_TABLE_FOLDER_TABLE" FromRole="FILE_TABLE" ToRole="FOLDER_TABLE" />
+        </EntityType>
+        <EntityType Name="FOLDER_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="KlasorAdi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="KlasorAciklamasi" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FILE_TABLE" Relationship="FileShareModel.FK_FILE_TABLE_FOLDER_TABLE" FromRole="FOLDER_TABLE" ToRole="FILE_TABLE" />
+          <NavigationProperty Name="USER_TABLE" Relationship="FileShareModel.FK_FOLDER_TABLE_USER_TABLE" FromRole="FOLDER_TABLE" ToRole="USER_TABLE" />
+        </EntityType>
+        <EntityType Name="USER_TABLE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="EMAIL" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PASSWORD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FOLDER_TABLE" Relationship="FileShareModel.FK_FOLDER_TABLE_USER_TABLE" FromRole="USER_TABLE" ToRole="FOLDER_TABLE" />
+        </EntityType>
+        <Association Name="FK_FILE_TABLE_FOLDER_TABLE">
+          <End Type="FileShareModel.FOLDER_TABLE" Role="FOLDER_TABLE" Multiplicity="1" />
+          <End Type="FileShareModel.FILE_TABLE" Role="FILE_TABLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FOLDER_TABLE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FILE_TABLE">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FOLDER_TABLE_USER_TABLE">
+          <End Type="FileShareModel.USER_TABLE" Role="USER_TABLE" Multiplicity="1" />
+          <End Type="FileShareModel.FOLDER_TABLE" Role="FOLDER_TABLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="USER_TABLE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FOLDER_TABLE">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FileShareModelStoreContainer" CdmEntityContainer="FileShareEntities">
+          <EntitySetMapping Name="FILE_TABLE">
+            <EntityTypeMapping TypeName="FileShareModel.FILE_TABLE">
+              <MappingFragment StoreEntitySet="FILE_TABLE">
+                <ScalarProperty Name="DosyayuklemeZamani" ColumnName="DosyayuklemeZamani" />
+                <ScalarProperty Name="FolderId" ColumnName="FolderId" />
+                <ScalarProperty Name="DosyaBoyutu" ColumnName="DosyaBoyutu" />
+                <ScalarProperty Name="DosyaUzantisi" ColumnName="DosyaUzantisi" />
+                <ScalarProperty Name="DosyaAdi" ColumnName="DosyaAdi" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FOLDER_TABLE">
+            <EntityTypeMapping TypeName="FileShareModel.FOLDER_TABLE">
+              <MappingFragment StoreEntitySet="FOLDER_TABLE">
+                <ScalarProperty Name="KlasorAciklamasi" ColumnName="KlasorAciklamasi" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="KlasorAdi" ColumnName="KlasorAdi" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USER_TABLE">
+            <EntityTypeMapping TypeName="FileShareModel.USER_TABLE">
+              <MappingFragment StoreEntitySet="USER_TABLE">
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

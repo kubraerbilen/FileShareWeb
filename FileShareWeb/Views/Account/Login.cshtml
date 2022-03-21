@@ -1,0 +1,65 @@
+﻿@model FileShareWeb.Models.Account.LoginModels
+
+@{
+    ViewBag.Title = "Giriş";
+}
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+        @using (Html.BeginForm())
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h2>Giriş</h2>
+                    <small style="color:red;">@TempData["Info"]</small> <br />
+                    @if (ViewBag.ReError != null && string.IsNullOrEmpty((string)ViewBag.ReError) == false)
+                    {
+                        <small style="color:red;">@ViewBag.ReError</small>
+                    }
+                    else
+                    {
+                        <small>Lütfen E-Posta Adresinizi ve Şifrenizi Giriniz.</small>
+                    }
+                </div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <center>
+                            <img src="https://picsum.photos/id/237/125/125" class="img-circle img-responsive" />
+                        </center>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.Member.EMAIL, new
+                        {
+                           @class = "form-control",
+                           placeholder = "E-Mail Adress",
+                           type = "email"
+                        })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.TextBoxFor(model => model.Member.PASSWORD, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Password",
+                            type = "password"
+                        })
+                    </div>
+
+                </div>
+                <div class="panel-footer text-right">
+                    
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-log-in"></span> Giriş
+                    </button>
+
+                </div>
+            </div>
+        }
+
+
+
+    </div>
+</div>
+

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<FileShareWeb.DB.FILE_TABLE>
+
+@{
+    ViewBag.Title = "Dosyalarım";
+}
+
+<h2>Dosyalarım</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DosyaAdi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DosyaUzantisi)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FolderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DosyayuklemeZamani)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DosyaAdi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DosyaUzantisi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FolderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DosyayuklemeZamani)
+            </td>
+            <td>
+                <button type="button" onclick="DeleteProduct('@Url.Action("DeleteFile", new { id=item.ID })')" class="btn btn-danger btn-xs">Sil</button>
+            </td>
+        </tr>
+    }
+</table>
+<hr />
+<br />
+@*App_Data klasöründeki resimleri görüntüleme*@
+@foreach (var imgPath in Directory.GetFiles(Server.MapPath("~/App_Data/uploads"), "*.jpg"))
+
+{
+
+    var img = new FileInfo(imgPath);
+
+    <li>
+
+        <a class="fancybox" data-fancybox-group="group" href="@Url.Content(String.Format("~/App_Data/uploads", img.Name))" title="@ViewBag.HaberAdi">
+
+            <span class="img-holder">
+
+                <img src="@Url.Content(String.Format("~/Content/img/@ViewBag.ID/{0}", img.Name))">
+
+            </span>
+
+        </a>
+
+    </li>
+
+}
+
+
+
+<script>
+    function DeleteProduct(url) {
+        if (confirm("Silmek İstediğine Emin Misin?")) {
+            location.href = url;
+        }
+    }
+</script>
