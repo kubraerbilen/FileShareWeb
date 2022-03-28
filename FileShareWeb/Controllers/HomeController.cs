@@ -1,4 +1,5 @@
-﻿using FileShareWeb.Filter;
+﻿using FileShareWeb.DB;
+using FileShareWeb.Filter;
 using FileShareWeb.Models.File;
 using FileShareWeb.Models.Folder;
 using System;
@@ -91,12 +92,13 @@ namespace FileShareWeb.Controllers
         }
         public ActionResult DosyaYukle(System.Web.HttpPostedFileBase yuklenecekDosya)
         {
-            DB.FILE_TABLE _file = null;
+            Guid cID = CurrentUser().ID;
+            var folder = context.FOLDER_TABLE.FirstOrDefault(x => x.ID == cID);
             if (yuklenecekDosya != null)
             {
                 string dosyaYolu = Path.GetFileName(yuklenecekDosya.FileName);
                 string dosyaAdi = "-" + Guid.NewGuid().ToString().Replace("-", "");
-                string klasor = CurrentUser().ID.ToString() ;
+                string klasor = CurrentUser().ID.ToString();
                 var yuklemeYeri = Path.Combine(Server.MapPath("~/App_Data" + "/" + klasor + "/" + dosyaAdi)); // her kullanıcı id si için nasıl dosya oluşur ????
                 yuklenecekDosya.SaveAs(yuklemeYeri);
                 //_file.DosyaAdi = yuklenecekDosya.FileName;
@@ -104,6 +106,19 @@ namespace FileShareWeb.Controllers
                 //_file.DosyayuklemeZamani = DateTime.Now;
                 //_file.FolderId = CurrentUser().ID;
                 //_file.DosyaUzantisi = yuklenecekDosya.ContentType;
+                FileShareEntities entity = new FileShareEntities();
+                FILE_TABLE yeniDosya = new FILE_TABLE()
+                {
+                    ID = Guid.NewGuid(),
+                    DosyaAdi = dosyaAdi,
+                    DosyaUzantisi = dosyaYolu,
+                    DosyaBoyutu = yuklenecekDosya.ContentLength,
+                    DosyayuklemeZamani = DateTime.Now,
+                    FolderId = folder.ID
+                };
+                entity.FILE_TABLE.Add(yeniDosya);
+                entity.SaveChanges();
+
             }
             return View();
         }
